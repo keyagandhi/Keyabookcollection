@@ -1,15 +1,21 @@
+/* File Name:books.js
+ Author Name:Keya Gandhi
+ Student Id:300964054
+ Web App Name:My Favourite Books*/
+
+
 // modules required for routing
 let express = require('express');
 let router = express.Router();
 let mongoose = require('mongoose');
 
 // define the book model
-let book = require('../models/books');
+let bookModel = require('../models/books');
 
 /* GET books List page. READ */
 router.get('/', (req, res, next) => {
   // find all books in the books collection
-  book.find( (err, books) => {
+  bookModel.find( (err, books) => {
     if (err) {
       return console.error(err);
     }
@@ -28,7 +34,7 @@ router.get('/add', (req, res, next) => {
 
   res.render('books/details', {
     title: "Add a New Book",
-    books:book
+    books:bookModel
     
 });
     
@@ -38,14 +44,14 @@ router.get('/add', (req, res, next) => {
 // POST process the Book Details page and create a new Book - CREATE
 router.post('/add', (req, res, next) => {
 
-  let newBook = book({
+  let newBook = bookModel({
     "Title":req.body.title,
     "Price":req.body.price,
     "Author":req.body.author,
     "Genre":req.body.genre
 });
 
-book.create(newBook, (err, books) => {
+bookModel.create(newBook, (err, books) => {
     if(err) {
         console.log(err);
         res.end(err);
@@ -61,7 +67,7 @@ book.create(newBook, (err, books) => {
 router.get('/edit/:id', (req, res, next) => {
 
   let id = req.params.id;
-  book.findById(id, (err, bookObject) => {
+  bookModel.findById(id, (err, bookObject) => {
       if(err) {
           console.log(err);
           res.end(err);
@@ -80,7 +86,7 @@ router.get('/edit/:id', (req, res, next) => {
 router.post('/edit/:id', (req, res, next) => {
   let id = req.params.id;
 
-  let updatedBook = book({
+  let updatedBook = bookModel({
       "_id": id,
       "Title": req.body.title,
       "Price": req.body.price,
@@ -88,7 +94,7 @@ router.post('/edit/:id', (req, res, next) => {
       "Genre":req.body.genre
   });
 
-  book.update({_id: id}, updatedBook, (err) => {
+  bookModel.update({_id: id}, updatedBook, (err) => {
       if(err) {
           console.log(err);
           res.end(err);
@@ -106,7 +112,7 @@ router.get('/delete/:id', (req, res, next) => {
 
   let id = req.params.id;
 
-  book.remove({_id: id}, (err) => {
+  bookModel.remove({_id: id}, (err) => {
       if(err) {
           console.log(err);
           res.end(err);
